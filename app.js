@@ -6,7 +6,7 @@ const app = express();
 // allows the app to access the body of req
 app.use(express.json());
 //import the data
-const products = require("./products");
+let products = require("./products");
 // bind our application to  this port
 const PORT = 8000;
 // app.listen(8000, () => {
@@ -27,17 +27,22 @@ app.get("/api/products", (req, res) => {
 // });
 // create an api that adds to my data
 app.post("/api/products", (req, res) => {
-  const newProduct = products.push(req.body);
+  products.push(req.body);
   res.status(201).json(req.body);
   //   console.log("posting", req.body);
 });
 // i am putting a variable in the url called : rout param
 app.delete("/api/products/:productId", (req, res) => {
-  const { productId } = req.params;
+  const productId = req.params.productId;
   const foundProduct = products.find(
     (product) => product.id === +req.params.productId
   );
-  res.json(foundProduct);
-  res.status(204).end();
+  if (foundProduct) {
+    products = products.filter((product) => product.id !== productId);
+    res.status(204);
+    return res.end();
+  } else {
+    return res.status(404).json("product not found");
+  }
 });
 //   console.log("posting", req.body);
