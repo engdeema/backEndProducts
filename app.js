@@ -1,7 +1,7 @@
 // call express
 const express = require("express");
 
-// express instance
+// express instance blueprints //قالب كبير واسوي منه نسخ صغار
 const app = express();
 // allows the app to access the body of req
 app.use(express.json());
@@ -38,7 +38,7 @@ app.delete("/api/products/:productId", (req, res) => {
     (product) => product.id === +req.params.productId
   );
   if (foundProduct) {
-    products = products.filter((product) => product.id !== productId);
+    products = products.filter((product) => product.id !== +productId);
     res.status(204);
     return res.end();
   } else {
